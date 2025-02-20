@@ -1,5 +1,6 @@
 import { UsersRepository } from "@/repositories/users-repository";
 import { hash } from "bcryptjs";
+import { UserAlredyExistsError } from "./errors/user-alredy-exists-error";
 
 interface RegisterUseCaseRequest {
   name: string;
@@ -15,7 +16,7 @@ export class RegisterUseCase {
     const userWithSameEmail = await this.userRepository.findByEmail(email);
 
     if (userWithSameEmail) {
-      throw new Error("E-mail alredy exists.");
+      throw new UserAlredyExistsError();
     }
 
     this.userRepository.create({
