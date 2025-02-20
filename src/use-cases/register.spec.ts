@@ -1,15 +1,20 @@
 import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
-import { expect, describe, it } from "vitest";
+import { expect, describe, it, beforeEach } from "vitest";
 import { RegisterUseCase } from "./register";
 import { compare } from "bcryptjs";
 import { UserAlredyExistsError } from "./errors/user-alredy-exists-error";
 
-describe("Register Use Case", () => {
-  it("should register a new user", async () => {
-    const userRepository = new InMemoryUsersRepository();
-    const registerUseCase = new RegisterUseCase(userRepository);
+let usersRepository: InMemoryUsersRepository;
+let sut: RegisterUseCase;
 
-    const { user } = await registerUseCase.execute({
+describe("Register Use Case", () => {
+  beforeEach(() => {
+    usersRepository = new InMemoryUsersRepository();
+    sut = new RegisterUseCase(usersRepository);
+  });
+
+  it("should register a new user", async () => {
+    const { user } = await sut.execute({
       name: "Fulano",
       email: "Fulano@gmail.com",
       password: "123456",
@@ -19,10 +24,7 @@ describe("Register Use Case", () => {
   });
 
   it("should hash user password upon registration", async () => {
-    const userRepository = new InMemoryUsersRepository();
-    const registerUseCase = new RegisterUseCase(userRepository);
-
-    const { user } = await registerUseCase.execute({
+    const { user } = await sut.execute({
       name: "Fulano",
       email: "Fulano@gmail.com",
       password: "123456",
@@ -37,17 +39,14 @@ describe("Register Use Case", () => {
   });
 
   it("should not be able to register with same email twice", async () => {
-    const userRepository = new InMemoryUsersRepository();
-    const registerUseCase = new RegisterUseCase(userRepository);
-
-    await registerUseCase.execute({
+    await sut.execute({
       name: "Fulano",
       email: "Fulano@gmail.com",
       password: "123456",
     });
 
     await expect(() =>
-      registerUseCase.execute({
+      sut.execute({
         name: "Fulano",
         email: "Fulano@gmail.com",
         password: "123456",
