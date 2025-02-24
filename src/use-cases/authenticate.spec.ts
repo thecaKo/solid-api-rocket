@@ -4,8 +4,8 @@ import { AuthenticateUseCase } from "./authenticate";
 import { InvalidCredentials } from "./errors/invalid-credentials-error";
 import { hash } from "bcryptjs";
 
-let usersRepository = new InMemoryUsersRepository();
-let sut = new AuthenticateUseCase(usersRepository);
+let usersRepository: InMemoryUsersRepository;
+let sut: AuthenticateUseCase;
 
 describe("Register Use Case", () => {
   beforeEach(() => {
@@ -27,6 +27,7 @@ describe("Register Use Case", () => {
 
     expect(user.id).toEqual(expect.any(String));
   });
+
   it("should not be able to authenticate with wrong email", async () => {
     await expect(() =>
       sut.execute({

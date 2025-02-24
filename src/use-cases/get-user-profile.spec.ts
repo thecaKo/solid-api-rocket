@@ -4,8 +4,8 @@ import { hash } from "bcryptjs";
 import { GetUserProfileUseCase } from "./get-user-profile";
 import { ResourceNotFoundError } from "./errors/resource-not-found-error";
 
-let usersRepository = new InMemoryUsersRepository();
-let sut = new GetUserProfileUseCase(usersRepository);
+let usersRepository: InMemoryUsersRepository;
+let sut: GetUserProfileUseCase;
 
 describe("Get Profile Use Case", () => {
   beforeEach(() => {
