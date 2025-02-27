@@ -8,7 +8,9 @@
     "start": "node build/server.js",
     "build": "tsup src --out-dir build",
     "test": "vitest run",
-    "test:watch": "vitest",
+    "test:e2e": "vitest run --dir src/http",
+    "pretest:e2e": "cd prisma/prisma-environemnt-prisma && npm link",
+    "test:watch": "vitest --dir src/use-cases",
     "test:coverage": "vitest run --coverage",
     "test:ui": "vitest --ui"
   },
